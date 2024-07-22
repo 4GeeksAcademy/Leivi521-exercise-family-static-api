@@ -35,8 +35,47 @@ def handle_hello():
         "family": members
     }
 
-
     return jsonify(response_body), 200
+
+@app.route('/add_member', methods=['POST'])
+def handel_add_member():
+    request_body = request.json.get
+    member = {
+        "id": FamilyStructure._generateId(FamilyStructure) ,
+        "first_name": request_body("first_name"), 
+        "last_name": jackson_family.last_name,  
+        "age": request_body('age'),
+        "lucky_numbers": request_body("lucky_numbers")
+        
+        }
+    new_member = jackson_family.add_member(member)
+    return jsonify(new_member)
+
+
+
+@app.route('/member/<int:id>', methods=['GET'])
+def handel_single_member(id):
+    member = jackson_family.get_member(id)
+    if member == None:
+        return "Memmber not found", 400
+    else: 
+        return jsonify(member), 200
+
+
+
+@app.route('/delete_member/<int:id>', methods=['DELETE'])
+def handel_delete_member(id):
+    result = jackson_family.delete_member(id)
+    if result == False: 
+        return "Error: member not deleted", 400
+    return "member has been deleted", 204
+
+
+
+    
+
+
+    
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
